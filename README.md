@@ -15,7 +15,8 @@ To run:
 
 html - js/jQuery - css - microtemplate.js - fancybox - jquery validation
 
+Spark backend:
+https://github.com/OlegPahhomov/dropbox-java-spark-back
 
-This is front-end part of dropbox-java.
-
-
+This is Original joint project (discontinued because it's separated)
+https://github.com/OlegPahhomov/dropbox-java
