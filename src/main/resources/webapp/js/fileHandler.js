@@ -46,7 +46,6 @@ var fileHandler = {
             e.preventDefault();
             if (addPictureFormElem.valid()) {
                 var data = new FormData($(this)[0]);
-                console.log(data);
                 $.ajax({
                     url: serverConfig.url('add'),
                     data: data,
