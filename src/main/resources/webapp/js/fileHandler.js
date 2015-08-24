@@ -24,9 +24,7 @@ var fileHandler = {
             var deleteId = deleteBox[0].id.split("_").pop();
             deleteBox.submit(function (e) {
                 e.preventDefault();
-                if (confirm("Are you sure!") == false) {
-                    return;
-                } else {
+                if (confirm("Are you sure!") == true)
                     $.ajax({
                         url: serverConfig.url('remove/' + deleteId),
                         cache: false,
@@ -38,8 +36,7 @@ var fileHandler = {
                     }).fail(function (jqXHR, textStatus) {
                         alert("Error occurred");
                         console.log("Request failed: " + textStatus);
-                    })
-                }
+                    });
             })
         })
     },
@@ -63,8 +60,6 @@ var fileHandler = {
                     alert("Error occurred");
                     console.log("Request failed: " + textStatus);
                 });
-            } else {
-                return false;
             }
 
         });
