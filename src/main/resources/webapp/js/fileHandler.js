@@ -24,8 +24,35 @@ var fileHandler = {
             var deleteId = deleteBox[0].id.split("_").pop();
             deleteBox.submit(function (e) {
                 e.preventDefault();
+                if (confirm("Are you sure!") == false) {
+                    return;
+                } else {
+                    $.ajax({
+                        url: serverConfig.url('remove/' + deleteId),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        type: 'POST'
+                    }).done(function () {
+                        location.reload();
+                    }).fail(function (jqXHR, textStatus) {
+                        alert("Error occurred");
+                        console.log("Request failed: " + textStatus);
+                    })
+                }
+            })
+        })
+    },
+    savePictures: function saveFiles() {
+        var addPictureFormElem = $('#fileForm');
+        addPictureFormElem.submit(function (e) {
+            e.preventDefault();
+            if (addPictureFormElem.valid()) {
+                var data = new FormData($(this)[0]);
+                console.log(data);
                 $.ajax({
-                    url: serverConfig.url('remove/' + deleteId),
+                    url: serverConfig.url('add'),
+                    data: data,
                     cache: false,
                     contentType: false,
                     processData: false,
@@ -35,28 +62,11 @@ var fileHandler = {
                 }).fail(function (jqXHR, textStatus) {
                     alert("Error occurred");
                     console.log("Request failed: " + textStatus);
-                })
-            })
-        })
-    },
-    savePictures: function saveFiles() {
-        var addPictureFormElem = $('#fileForm');
-        addPictureFormElem.submit(function (e) {
-            e.preventDefault();
-            var data = new FormData($(this)[0]);
-            $.ajax({
-                url: serverConfig.url('add'),
-                data: data,
-                cache: false,
-                contentType: false,
-                processData: false,
-                type: 'POST'
-            }).done(function () {
-                location.reload();
-            }).fail(function (jqXHR, textStatus) {
-                alert("Error occurred");
-                console.log("Request failed: " + textStatus);
-            });
+                });
+            } else {
+                return false;
+            }
+
         });
     }
 }
