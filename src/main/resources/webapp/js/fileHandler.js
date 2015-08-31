@@ -52,7 +52,7 @@ var fileHandler = {
                 processData: false,
                 type: 'POST'
             }).done(function () {
-                location.reload();
+               location.reload();
             }).fail(function (jqXHR, textStatus) {
                 alert("Error occurred");
                 console.log("Request failed: " + textStatus);
