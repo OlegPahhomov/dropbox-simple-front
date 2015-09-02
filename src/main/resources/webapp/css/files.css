@@ -110,6 +110,15 @@ and (min-height: 1100px) {
     cursor: pointer;
 }
 
+.close:active{
+    border: none;
+    outline:none;
+}
+.close:focus{
+    border: none;
+    outline: none;
+}
+
 .file__delete {
     position: absolute;
     bottom: 0;
