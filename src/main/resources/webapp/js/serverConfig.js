@@ -2,7 +2,7 @@ var serverConfig = {
 
     //reconfig this to return base server
     SERVER: function () {
-        return this.SPARK();
+        return this.SPRING_BOOT();
     },
 
     url: function (url) {
