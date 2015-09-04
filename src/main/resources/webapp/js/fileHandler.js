@@ -32,7 +32,7 @@ var fileHandler = {
                         processData: false,
                         type: 'POST'
                     }).done(function () {
-                        location.reload();
+                        fileHandler.loadPictures();
                     }).fail(function (jqXHR, textStatus) {
                         alert("Error occurred");
                         console.log("Request failed: " + textStatus);
@@ -54,7 +54,7 @@ var fileHandler = {
                     processData: false,
                     type: 'POST'
                 }).done(function () {
-                    location.reload();
+                    fileHandler.loadPictures();
                 }).fail(function (jqXHR, textStatus) {
                     alert("Error occurred");
                     console.log("Request failed: " + textStatus);
