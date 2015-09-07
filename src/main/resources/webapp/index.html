@@ -38,21 +38,20 @@
         <div class="heading"><h3>List Of Files</h3></div>
         <div class="file-container">
             <% for ( var i = 0; i < files.length; i++ ) { %>
-            <div class="<%=getRatioClass(files[i]) %>" >
+            <div class="<%= ratioClass(files[i]) %>">
 
                 <a class="fancybox"
-                   href="<%= '#show_popup_link_' + files[i].id %>"
+                   href="<%= getHref(files[i]) %>"
                    rel="pictures"
                    title="<%=files[i].name %>">
-
-                    <img title="<%=files[i].name %>" src="<%= serverConfig.url('picture/' + files[i].id) %>">
+                    <img title="<%=files[i].name %>" src="<%= imgUrl(files[i]) %>">
                 </a  >
 
                 <div class="file-fullscreen" id="<%= 'show_popup_link_' + files[i].id %>" style="display: none;">
-                    <img src="<%= serverConfig.url('picture/' + files[i].id) %>">
+                    <img src="<%= imgUrl(files[i]) %>">
                 </div  >
 
-                <form id="<%= 'delete_file_' + files[i].id %>">
+                <form id="<%= deleteId(files) %>">
                     <button type="submit" class="close" title="Delete file">&times;</button>
                 </form>
             </div>
