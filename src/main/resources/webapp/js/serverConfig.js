@@ -15,6 +15,8 @@ var serverConfig = {
     SPARK_PORT: "4567/",
     JETTY_PORT: "8080/",
     SPRING_BOOT_PORT: "8080/",
+    LEIN_RING_PORT: "3000/",
+    NODE_JS_PORT: "3000/",
     SPARK: function () {
         return (this.LOCALHOST + this.SPARK_PORT)
     },
@@ -23,5 +25,11 @@ var serverConfig = {
     },
     SPRING_BOOT: function () {
         return (this.LOCALHOST + this.SPRING_BOOT_PORT)
+    },
+    LEIN_RING: function () {
+        return (this.LOCALHOST + this.LEIN_RING_PORT)
+    },
+    NODE_JS: function () {
+        return (this.LOCALHOST + this.NODE_JS_PORT)
     }
 }

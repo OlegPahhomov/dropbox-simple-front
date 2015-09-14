@@ -11,7 +11,7 @@
     <script src="libs/fancybox/source/jquery.fancybox.pack.js"></script>
 
     <script>
-        $.get('header.html', function(data){
+        $.get('header.html', function (data) {
             $('#header').html(data);
         });
     </script>
@@ -23,7 +23,7 @@
 </head>
 <body>
 <div id="content">
-    <div id = "header"></div>
+    <div id="header"></div>
 
 
     <div id="show_files">Loading...</div>
@@ -45,13 +45,13 @@
                    rel="pictures"
                    title="<%=files[i].name %>">
                     <img title="<%=files[i].name %>" src="<%= imgUrl(files[i]) %>">
-                </a  >
+                </a>
 
                 <div class="file-fullscreen" id="<%= 'show_popup_link_' + files[i].id %>" style="display: none;">
                     <img src="<%= imgUrl(files[i]) %>">
-                </div  >
+                </div>
 
-                <form id="<%= deleteId(files) %>">
+                <form id="<%= deleteId(files[i]) %>">
                     <button type="submit" class="close" title="Delete file">&times;</button>
                 </form>
             </div>
@@ -59,19 +59,20 @@
             <% } %>
         </div>
     </script>
+
+    <div id="file-form-div">
+        <script>
+            $.get('html/upload-form.html', function (data) {
+                $('#file-form-div').html(data);
+            });
+        </script>
+    </div>
+
     <script>
         $(window).load(function () {
             fileHandler.deletePicture();
         })
     </script>
-
-    <div id="file-form-div">
-        <script>
-            $.get('html/upload-form.html', function(data){
-                $('#file-form-div').html(data);
-            });
-        </script>
-    </div>
 </div>
 </body>
 </html>
