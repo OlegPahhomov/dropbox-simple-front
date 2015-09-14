@@ -1,5 +1,6 @@
 var fileHandler = {
 
+
     loadPictures: function loadFiles() {
         var showFilesElem = $("#show_files");
         $.ajax(serverConfig.url('files'))
@@ -7,10 +8,21 @@ var fileHandler = {
                 showFilesElem.html(tmpl("show_files_template",
                     {
                         files: response,
-                        getRatioClass: function (image) {
+
+                        ratioClass: function (image) {
                             var experimental_ratio = 1.45;
                             return image.ratio > experimental_ratio ? 'file bigfile' : 'file';
+                        },
+                        getHref: function (image) {
+                            return "#show_popup_link_" + image.id;
+                        },
+                        imgUrl: function (image) {
+                            return serverConfig.url('picture/'+ image.id);
+                        },
+                        deleteId: function (image) {
+                            return 'delete_file_' + image.id;
                         }
+
                     }
                 ))
             }).fail(function (jqXHR, textStatus) {
