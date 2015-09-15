@@ -20,21 +20,23 @@ var fileHandler = {
         return {
             files: response,
 
-            ratioClass: function (image) {
-                var experimental_ratio = 1.45;
-                return image.ratio > experimental_ratio ? 'file bigfile' : 'file';
-            },
+            util:{
+                ratioClass: function (image) {
+                    var experimental_ratio = 1.45;
+                    return image.ratio > experimental_ratio ? 'file bigfile' : 'file';
+                },
 
-            getHref: function (image) {
-                return "#show_popup_link_" + image.id;
-            },
+                getHref: function (image) {
+                    return "#show_popup_link_" + image.id;
+                },
 
-            imgUrl: function (image) {
-                return serverConfig.url('picture/' + image.id);
-            },
+                imgUrl: function (image) {
+                    return serverConfig.url('picture/' + image.id);
+                },
 
-            deleteId: function (image) {
-                return 'delete_file_' + image.id;
+                deleteId: function (image) {
+                    return 'delete_file_' + image.id;
+                }
             }
         };
     },
@@ -75,7 +77,10 @@ var fileHandler = {
                     processData: false,
                     type: 'POST'
                 }).done(function () {
-                    fileHandler.loadPictures();
+                   fileHandler.loadPictures();
+                    /*var util = fileHandler.createResponse().util;
+                    var html = tmpl("file_template", {file: {name:'ololo', ratio:'123'}, util: util});
+                    $('.file').last().append(html);*/
                 }).fail(function (jqXHR, textStatus) {
                     alert("Error occurred");
                     console.log("Request failed: " + textStatus);

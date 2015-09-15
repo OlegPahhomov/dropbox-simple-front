@@ -21,39 +21,38 @@
     <div class="heading"><h3>List Of Files</h3></div>
     <div class="file-container">
         <% for ( var i = 0; i < files.length; i++ ) { %>
-        <div class="<%= ratioClass(files[i]) %>">
-
-            <a class="fancybox"
-               href="<%= getHref(files[i]) %>"
-               rel="pictures"
-               title="<%=files[i].name %>">
-                <img title="<%=files[i].name %>" src="<%= imgUrl(files[i]) %>">
-            </a>
-
-            <div class="file-fullscreen" id="<%= 'show_popup_link_' + files[i].id %>" style="display: none;">
-                <img src="<%= imgUrl(files[i]) %>">
-            </div>
-
-            <form id="<%= deleteId(files[i]) %>">
-                <button type="submit" class="close" title="Delete file">&times;</button>
-            </form>
-        </div>
-
+        <%= tmpl("file_template", {file: files[i], util:util}) %>
         <% } %>
     </div>
 </script>
 
+<script type="text/html" id="file_template">
+    <div class="<%= util.ratioClass(file) %>">
+
+        <a class="fancybox"
+           href="<%= util.getHref(file) %>"
+           rel="pictures"
+           title="<%=file.name %>">
+            <img title="<%=file.name %>" src="<%= util.imgUrl(file) %>">
+        </a>
+
+        <div class="file-fullscreen" id="<%= 'show_popup_link_' + file.id %>" style="display: none;">
+            <img src="<%= util.imgUrl(file) %>">
+        </div>
+
+        <form id="<%= util.deleteId(file) %>">
+            <button type="submit" class="close" title="Delete file">&times;</button>
+        </form>
+    </div>
+</script>
 
 <script src="js/serverConfig.js"></script>
 <script src="js/fileHandler.js"></script>
-
 <script>
     $.get('header.html', function (data) {
         $('#header').html(data);
     });
-    fileHandler.loadPictures().done(function () {
-        fileHandler.deletePicture()
-    });
+    fileHandler.loadPictures();
     $.get('html/upload-form.html', function (data) {
         $('#file-form-div').html(data);
     });
