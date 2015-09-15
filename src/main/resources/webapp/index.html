@@ -33,7 +33,7 @@
            href="<%= util.getHref(file) %>"
            rel="pictures"
            title="<%=file.name %>">
-            <img title="<%=file.name %>" src="<%= util.imgUrl(file) %>">
+            <img title="<%=file.name %>" src="<%= util.thumbnailUrl(file) %>">
         </a>
 
         <div class="file-fullscreen" id="<%= 'show_popup_link_' + file.id %>" style="display: none;">
