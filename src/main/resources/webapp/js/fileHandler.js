@@ -101,35 +101,55 @@ var fileHandler = {
             return promise.promise();
         },
 
+        asyncStuff: function (defer) {
+            return function (request) {
+                $.ajax({
+                    method: 'POST',
+                    url: serverConfig.url('addjson'),
+                    data: JSON.stringify(request)
+                }).done(function () {
+                    defer.resolve();
+                }).fail(function (jqXHR, textStatus) {
+                    alert("Error occurred");
+                    console.log("Request failed: " + textStatus);
+                });
+            };
+        },
+
+        extracted: function (defer) {
+            return function (request) {
+                $.ajax({
+                    method: 'POST',
+                    url: serverConfig.url('addjson'),
+                    data: JSON.stringify(request)
+                }).done(function () {
+                    defer.resolve();
+                }).fail(function (jqXHR, textStatus) {
+                    alert("Error occurred");
+                    console.log("Request failed: " + textStatus);
+                });
+            };
+        },
+
         saveJsonPictures: function saveFiles() {
+            var that = this;
             var addPictureFormElem = $('#fileJsonForm');
             addPictureFormElem.submit(function (e) {
                     e.preventDefault();
                     if (addPictureFormElem.valid()) {
-                        var uploadedFiles = $('#fileJsonForm')[0].file.files;
                         var promises = [];
-                        $.each(uploadedFiles, function (i, file) {
+
+                        var uploadedFiles = $('#fileJsonForm')[0].file.files;
+                        for(var i = 0; i< uploadedFiles.length; i++){
+                            var file = uploadedFiles[i];
                             var defer = jQuery.Deferred();
                             promises.push(defer);
-                            var readyFile = fileHandler.getBytesFromFile(uploadedFiles[i]);
-                            readyFile.then(
-                                function (request) {
-                                    $.ajax({
-                                        method: 'POST',
-                                        url: serverConfig.url('addjson'),
-                                        data: JSON.stringify(request)
-                                    }).done(function () {
-                                        defer.resolve();
-                                    }).fail(function (jqXHR, textStatus) {
-                                        alert("Error occurred");
-                                        console.log("Request failed: " + textStatus);
-                                    });
-                                    return defer;
-                                }
-                            );
-                        });
+
+                            that.getBytesFromFile(file).then(that.extracted(defer));
+                        }
+
                         $.when.apply($, promises).then(function () {
-                            fileHandler.loadPictures();
+                            that.loadPictures();
                         });
                     }
                 }
