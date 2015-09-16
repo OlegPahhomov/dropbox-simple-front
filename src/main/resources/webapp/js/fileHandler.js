@@ -89,7 +89,7 @@ var fileHandler = {
             });
         },
 
-        getBytesFromFile: function (file) {
+        readFile: function (file) {
             var defer = jQuery.Deferred();
             var reader = new FileReader();
             reader.readAsDataURL(file);
@@ -101,24 +101,22 @@ var fileHandler = {
             return defer;
         },
 
-        extracted: function (request) {
+        sendFile: function (file) {
             return $.ajax({
                 method: 'POST',
                 url: serverConfig.url('addjson'),
-                data: JSON.stringify(request)
+                data: JSON.stringify(file)
             }).fail(function (jqXHR, textStatus) {
                 alert("Error occurred");
                 console.log("Request failed: " + textStatus);
-            }).promise();
+            });
         },
 
-        pizdecoma: function (file, defer) {
-            var that = this;
-            that.getBytesFromFile(file).then(function (file) {
-                return that.extracted(file);
-            }).then(function () {
-                defer.resolve();
-            });
+        readAndSendFile: function (file) {
+            var that =this;
+            return this.readFile(file).then(function (file) {
+                return that.sendFile(file);
+            })
         },
 
         saveJsonPictures: function saveFiles() {
@@ -132,9 +130,8 @@ var fileHandler = {
                         var uploadedFiles = $('#fileJsonForm')[0].file.files;
                         for(var i = 0; i< uploadedFiles.length; i++) {
                             var file = uploadedFiles[i];
-                            var defer = jQuery.Deferred();
-                            deffers.push(defer);
-                            that.pizdecoma(file, defer);
+                            var promise = that.readAndSendFile(file);
+                            deffers.push(promise);
                         }
 
                         $.when.apply($, deffers).then(function () {
