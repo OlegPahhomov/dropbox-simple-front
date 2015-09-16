@@ -76,10 +76,10 @@ var fileHandler = {
                     processData: false,
                     type: 'POST'
                 }).done(function () {
-                   fileHandler.loadPictures();
+                    fileHandler.loadPictures();
                     /*var util = fileHandler.createResponse().util;
-                    var html = tmpl("file_template", {file: {name:'ololo', ratio:'123'}, util: util});
-                    $('.file').last().append(html);*/
+                     var html = tmpl("file_template", {file: {name:'ololo', ratio:'123'}, util: util});
+                     $('.file').last().append(html);*/
                 }).fail(function (jqXHR, textStatus) {
                     alert("Error occurred");
                     console.log("Request failed: " + textStatus);
@@ -87,5 +87,45 @@ var fileHandler = {
             }
 
         });
-    }
-}
+    },
+
+    getBytesFromFile: function (file) {
+        var promise = jQuery.Deferred();
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function shipOff(event) {
+            var result = event.target.result;
+            var fileName = file.name;
+            promise.resolve({file: result, name: fileName});
+        };
+        return promise.promise();
+    },
+
+    saveJsonPictures: function saveFiles() {
+        var addPictureFormElem = $('#fileJsonForm');
+        addPictureFormElem.submit(function (e) {
+            e.preventDefault();
+            if (addPictureFormElem.valid()) {
+                var uploadedFiles = $('#fileJsonForm')[0].file.files;
+                var promises = [];
+                for (var i = 0; i < uploadedFiles.length; i++) {
+                    promises.push(fileHandler.getBytesFromFile(uploadedFiles[i])
+                        .then(function (request) {
+                            $.ajax({
+                                method: 'POST',
+                                url: serverConfig.url('addjson'),
+                                data: JSON.stringify(request)
+                            }).fail(function (jqXHR, textStatus) {
+                                alert("Error occurred");
+                                console.log("Request failed: " + textStatus);
+                            });
+                        }));
+                }
+                $.when(promises).done(function () {
+                    setTimeout(function () {
+                        fileHandler.loadPictures();
+                    }, 1000);
+                });
+            }
+        });
+    }};
