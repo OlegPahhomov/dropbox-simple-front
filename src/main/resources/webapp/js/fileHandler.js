@@ -90,45 +90,35 @@ var fileHandler = {
         },
 
         getBytesFromFile: function (file) {
-            var promise = jQuery.Deferred();
+            var defer = jQuery.Deferred();
             var reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = function shipOff(event) {
                 var result = event.target.result;
                 var fileName = file.name;
-                promise.resolve({file: result, name: fileName});
+                defer.resolve({file: result, name: fileName});
             };
-            return promise.promise();
+            return defer;
         },
 
-        asyncStuff: function (defer) {
-            return function (request) {
-                $.ajax({
-                    method: 'POST',
-                    url: serverConfig.url('addjson'),
-                    data: JSON.stringify(request)
-                }).done(function () {
-                    defer.resolve();
-                }).fail(function (jqXHR, textStatus) {
-                    alert("Error occurred");
-                    console.log("Request failed: " + textStatus);
-                });
-            };
+        extracted: function (request) {
+            return $.ajax({
+                method: 'POST',
+                url: serverConfig.url('addjson'),
+                data: JSON.stringify(request)
+            }).fail(function (jqXHR, textStatus) {
+                alert("Error occurred");
+                console.log("Request failed: " + textStatus);
+            }).promise();
         },
 
-        extracted: function (defer) {
-            return function (request) {
-                $.ajax({
-                    method: 'POST',
-                    url: serverConfig.url('addjson'),
-                    data: JSON.stringify(request)
-                }).done(function () {
-                    defer.resolve();
-                }).fail(function (jqXHR, textStatus) {
-                    alert("Error occurred");
-                    console.log("Request failed: " + textStatus);
-                });
-            };
+        pizdecoma: function (file, defer) {
+            var that = this;
+            that.getBytesFromFile(file).then(function (file) {
+                return that.extracted(file);
+            }).then(function () {
+                defer.resolve();
+            });
         },
 
         saveJsonPictures: function saveFiles() {
@@ -137,18 +127,17 @@ var fileHandler = {
             addPictureFormElem.submit(function (e) {
                     e.preventDefault();
                     if (addPictureFormElem.valid()) {
-                        var promises = [];
+                        var deffers = [];
 
                         var uploadedFiles = $('#fileJsonForm')[0].file.files;
-                        for(var i = 0; i< uploadedFiles.length; i++){
+                        for(var i = 0; i< uploadedFiles.length; i++) {
                             var file = uploadedFiles[i];
                             var defer = jQuery.Deferred();
-                            promises.push(defer);
-
-                            that.getBytesFromFile(file).then(that.extracted(defer));
+                            deffers.push(defer);
+                            that.pizdecoma(file, defer);
                         }
 
-                        $.when.apply($, promises).then(function () {
+                        $.when.apply($, deffers).then(function () {
                             that.loadPictures();
                         });
                     }
