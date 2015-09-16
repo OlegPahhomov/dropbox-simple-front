@@ -108,7 +108,7 @@ var fileHandler = {
                     if (addPictureFormElem.valid()) {
                         var uploadedFiles = $('#fileJsonForm')[0].file.files;
                         var promises = [];
-                        for (var i = 0; i < uploadedFiles.length; i++) {
+                        $.each(uploadedFiles, function (i, file) {
                             var defer = jQuery.Deferred();
                             promises.push(defer);
                             var readyFile = fileHandler.getBytesFromFile(uploadedFiles[i]);
@@ -124,13 +124,11 @@ var fileHandler = {
                                         alert("Error occurred");
                                         console.log("Request failed: " + textStatus);
                                     });
+                                    return defer;
                                 }
                             );
-                        }
-                        $.when(promises[0]).done(function () {
-                            /*setTimeout(function () {
-                             fileHandler.loadPictures();
-                             }, 1000);*/
+                        });
+                        $.when.apply($, promises).then(function () {
                             fileHandler.loadPictures();
                         });
                     }
