@@ -14,8 +14,9 @@
 <div id="content">
     <div id="header"></div>
     <div id="show_files">Loading...</div>
-    <!--<div id="file-form-div"></div>-->
+    <div id="file-form-div"></div>
     <div id="file-json-form-div"></div>
+    <div id="file-json-bulk-form-div"></div>
 </div>
 
 <script type="text/html" id="show_files_template">
@@ -58,6 +59,9 @@
             });
             $.get('html/upload-form-json.html', function (data) {
                 $('#file-json-form-div').html(data);
+            });
+            $.get('html/upload-form-json-bulk.html', function (data) {
+                $('#file-json-bulk-form-div').html(data);
             });
             $('.fancybox').fancybox();
         });

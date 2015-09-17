@@ -1,10 +1,10 @@
-<form id="fileForm">
+<form id="fileJsonBulkForm">
     <div class="heading">
-        <h3>Upload new files (multipart/form-data)</h3>
+        <h3>Upload new files (json bulk)</h3>
     </div>
     <div class="upload-block">
         <div class="upload-block__item upload-block__item--big">
-            <input id="file"
+            <input id="file-json"
                    name="file"
                    type="file"
                    class="inherit-width upload-item-input"
@@ -25,12 +25,12 @@
 </form>
 
 <script type="text/javascript">
-    fileHandler.savePictures();
+    fileHandler.saveJsonPicturesBulk();
 </script>
 
 <script type="text/javascript">
     $(document).ready(function ($) {
-        $('#fileForm').validate({
+        $('#fileJsonBulkForm').validate({
             rules: {
                 file: {
                     required: true,
@@ -43,6 +43,6 @@
                     accept: "jpg and jpeg files only"
                 }
             }
-    });
+        });
     })
 </script>
