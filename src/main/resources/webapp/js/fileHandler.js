@@ -1,6 +1,5 @@
 var fileHandler = {
-
-        loadPictures: function loadFiles() {
+loadPictures: function loadFiles() {
             var showFilesElem = $("#show_files");
             return $.ajax(serverConfig.url('files'))
                 .done(function (response) {
@@ -113,9 +112,20 @@ var fileHandler = {
         },
 
         readAndSendFile: function (file) {
-            var that =this;
+            var that = this;
             return this.readFile(file).then(function (file) {
                 return that.sendFile(file);
+            })
+        },
+
+        sendFile2: function (file, files) {
+            return files.push(file);
+        },
+
+        readAndSendFile2: function (file, files) {
+            var that = this;
+            return this.readFile(file).then(function (file) {
+                return that.sendFile2(file, files);
             })
         },
 
@@ -141,5 +151,43 @@ var fileHandler = {
                 }
             )
             ;
-        }}
+        },
+
+    saveJsonPicturesBulk: function saveFiles() {
+        var that = this;
+        var addPictureFormElem = $('#fileJsonForm');
+        addPictureFormElem.submit(function (e) {
+                e.preventDefault();
+                if (addPictureFormElem.valid()) {
+                    var deffers = [];
+                    var files = [];
+
+                    var uploadedFiles = $('#fileJsonForm')[0].file.files;
+                    for (var i = 0; i < uploadedFiles.length; i++) {
+                        var file = uploadedFiles[i];
+                        var promise = that.readAndSendFile2(file, files);
+                        deffers.push(promise);
+                    }
+
+                    $.when.apply($, deffers).then(function () {
+                        var request = {
+                            files: files
+                        }
+                        $.ajax({
+                            method: 'POST',
+                            url: serverConfig.url('addjson'),
+                            data: JSON.stringify(request)
+                        }).fail(function (jqXHR, textStatus) {
+                            alert("Error occurred");
+                            console.log("Request failed: " + textStatus);
+                        }).done(function (jqXHR, textStatus) {
+                            that.loadPictures();
+                        });
+                    });
+                }
+            }
+        )
+        ;
+    }}
+    }
     ;
